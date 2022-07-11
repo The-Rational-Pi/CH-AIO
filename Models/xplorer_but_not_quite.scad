@@ -1,4 +1,4 @@
-points = [
+points_2 = [
 [0,0],
 [11.5,4.45],
 [26.575,1.55],
@@ -10,15 +10,20 @@ points = [
 [-(9.625+0.2*sqrt(2)),26.5+0.2*sqrt(2)]
 ];
 
+strum_midline_x = 10;
+strum_midline_y = 10.3+(14.9-10.3)/2;
+  
+points = [for (i=points_2) [i.x-strum_midline_x, i.y-strum_midline_y]];
+
 points_x = [for (i=points) i[0]];
 points_y = [for (i=points) i[1]];
-
+  
+echo(points_2);
 
 body_height = 3;
 rounding_r = 1;
 
-strum_midline_x = 10;
-strum_midline_y = 10.3+(14.9-10.3)/2;
+
  //how far the neck extends into the body
 neck_in_body = 3.7;
 neck_len_1 = 23.3;
@@ -27,12 +32,10 @@ neck_thickness = 3;
 w1 = 4.4;
 w2 = 3.7;
 w3 = 3.5;
-neck_start_x = 22;
+neck_start_x = 12;
 face_screw_vertices = [0,1,2,3,6,8];
 body_chop_x = 5;
 
-echo(points_x);
-echo(points_y);
 bds = [min(points_x),max(points_x),min(points_y),max(points_y)];
 w = max(points_x) - min(points_x) + 2*rounding_r;
 h = max(points_y) - min(points_y) + 2*rounding_r;
@@ -104,7 +107,7 @@ difference(){
                 }
             }
         }
-        translate([strum_midline_x-3.5,strum_midline_y-1.5,0.5]){
+        translate([-3.5,-1.5,0.5]){
             difference(){
                 union(){
                     minkowski(){
@@ -132,12 +135,11 @@ difference(){
             }
         }
     }
-    translate([strum_midline_x,strum_midline_y,0])
-        union(){
-            cube([5,1.8,4],center=true);
-        }    
- }
- }
+      union(){
+          cube([5,1.8,4],center=true);
+      }    
+  }
+}
  
 module body_solid_rounded(){
   minkowski(){
@@ -367,42 +369,42 @@ translate([0,7,0]){
 
 
 //face_plate_split
-//intersection(){
-//  translate([body_chop_x,-50,-50]){
-//    cube(100);
-//  }
-//  face_plate_final();
-//}
-//
-//translate([-5,0,0]){
-//  difference(){
-//    face_plate_final();
-//    translate([body_chop_x,-50,-50]){
-//      cube(100);
-//    }   
-//  }
-//}
+intersection(){
+  translate([body_chop_x,-50,-50]){
+    cube(100);
+  }
+  face_plate_final();
+}
+
+translate([-5,0,0]){
+  difference(){
+    face_plate_final();
+    translate([body_chop_x,-50,-50]){
+      cube(100);
+    }   
+  }
+}
 
 
-//color("green"){
-//  translate([neck_start_x-neck_in_body,strum_midline_y,body_height+rounding_r/2+0.3]){
-//    neck_1_top(neck_len_1,w1,w2);
-//  }
-//}
-//color("red"){
-//  translate([neck_start_x-neck_in_body,strum_midline_y,neck_thickness+rounding_r/2+0.3]){
-//    neck_shell(neck_len_1,neck_thickness,w1,w2);
-//  }
-//}
-//
-//color("orange"){
-//  translate([neck_start_x+neck_len_1-neck_in_body,strum_midline_y,neck_thickness+rounding_r/2+0.3]){
-//  frets_shell(frets_len,neck_thickness,w2,w3);
-//  }
-//}
-//
-//color("purple"){
-//  translate([neck_start_x+neck_len_1-neck_in_body,strum_midline_y,body_height+rounding_r/2+0.3]){
-//    frets_top(frets_len,w2,w3);
-//  }
-//}
+color("green"){
+  translate([neck_start_x-neck_in_body,0,body_height+rounding_r/2+0.3]){
+    neck_1_top(neck_len_1,w1,w2);
+  }
+}
+color("red"){
+  translate([neck_start_x-neck_in_body,0,neck_thickness+rounding_r/2+0.3]){
+    neck_shell(neck_len_1,neck_thickness,w1,w2);
+  }
+}
+
+color("orange"){
+  translate([neck_start_x+neck_len_1-neck_in_body,0,neck_thickness+rounding_r/2+0.3]){
+  frets_shell(frets_len,neck_thickness,w2,w3);
+  }
+}
+
+color("purple"){
+  translate([neck_start_x+neck_len_1-neck_in_body,0,body_height+rounding_r/2+0.3]){
+    frets_top(frets_len,w2,w3);
+  }
+}
