@@ -22,7 +22,7 @@ bp_hole_x = bp_x1/2;
 bp_hole_y = 12.3;
 
 //front plate (looks like the back plate with more bits on it)
-fp_id1 = 6;
+fp_id1 = 6.5;
 fp_od1 = 10.8;
 
 fp_h1 = 9;
