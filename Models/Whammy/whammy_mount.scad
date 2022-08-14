@@ -4,8 +4,8 @@
 
 //Back plate (bit with just plate and cylinder
 
-bp_x1 = 39; //full length
-bp_x2 = 35.5; //length without thin bits on end
+bp_x1 = 38; //full length
+bp_x2 = 34.5; //length without thin bits on end
 bp_y = 32; //width
 
 //heights are of the whole piece at given point
@@ -204,7 +204,7 @@ module front_plate() {
   }
 }
 
-back_plate();
-//front_plate();
+//back_plate();
+front_plate();
 //spring_holder();
 //front_plate_attachment();
