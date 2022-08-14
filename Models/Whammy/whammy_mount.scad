@@ -29,7 +29,25 @@ fp_h1 = 9;
 
 fp_screw_id = 1.9;
 fp_screw_od = 4;
+fp_screw_space_x = 29;
+fp_screw_x1 = bp_hole_x + fp_screw_space_x/2;
+fp_screw_x2 = bp_hole_x - fp_screw_space_x/2;
+fp_screw_y = bp_hole_y + fp_od1/2;
+fp_screw_h = 14;
 
+fp_under_cyl_h = 7.2;
+fp_under_cyl_id = 1.8;
+fp_under_cyl_od = 4;
+fp_under_cyl_x1 = bp_x1-5.5;
+fp_under_cyl_y1 = bp_hole_y + fp_id1/2;
+fp_under_cyl_x2 = 8;
+fp_under_cyl_y2 = fp_under_cyl_y1 + fp_under_cyl_od;
+
+fp_under_rect_h = 7;
+fp_under_rect_x = bp_hole_x;
+fp_under_rect_y = fp_under_cyl_y2 + fp_under_cyl_od;
+fp_under_rect_l = 4.21;
+fp_under_rect_w = 1.6;
 
 //front plate attachment thing, kinda looks like a koala
 
@@ -92,16 +110,26 @@ module spring_holder() {
     union() {
       
       difference(){
-        cylinder(sh_h1,d=sh_od,$fn=50);
-        cylinder(sh_h1,d=sh_id,$fn=50);
+        cylinder(sh_htot,d=sh_od,$fn=50);
+        cylinder(sh_htot,d=sh_id,$fn=50);
       }
       translate([sh_od/2-3,sh_od/2,0])
-      linear_extrude(sh_h1) {
+      linear_extrude(sh_htot) {
         polygon(sh_polygon);
       }
     }
     translate([sh_x2,sh_y2,0])
-    cylinder(h=sh_h1, d=sh_id2, $fn=50);
+      cylinder(h=sh_htot, d=sh_id2, $fn=50);
+    translate([0,0,sh_h1])
+      cylinder(sh_htot,d=sh_od,$fn=50);
+    difference() {
+    translate([sh_od/2-3,sh_od/2,-sh_h1])
+      linear_extrude(sh_htot) {
+        polygon(sh_polygon);
+      }
+      cylinder(sh_htot,d=sh_od,$fn=50);
+    }
+    
   }
 }
 
@@ -136,12 +164,47 @@ module front_plate_attachment() {
 }
 
 module front_plate() {
-  cube([bp_x1,bp_y,bp_h1]);
-  translate([(bp_x1-bp_x2)/2,0,0])
-    cube([bp_x2,bp_y,bp_h2]);
-  translate([bp_hole_x, bp_hole_y,0])
-    cylinder(d=fp_od1,h=fp_h1,$fn=50);
+  difference(){
+    union() {
+      cube([bp_x1,bp_y,bp_h1]);
+      translate([(bp_x1-bp_x2)/2,0,0])
+        cube([bp_x2,bp_y,bp_h2]);
+      translate([bp_hole_x, bp_hole_y,0])
+        cylinder(d=fp_od1,h=fp_h1,$fn=50);
+      translate([fp_screw_x1,fp_screw_y,0]){
+        difference(){
+          cylinder(h=fp_screw_h,d=fp_screw_od,$fn=50);
+          cylinder(h=fp_screw_h,d=fp_screw_id,$fn=50);
+        }
+      }
+      translate([fp_screw_x2,fp_screw_y,0]){
+        difference(){
+          cylinder(h=fp_screw_h,d=fp_screw_od,$fn=50);
+          cylinder(h=fp_screw_h,d=fp_screw_id,$fn=50);
+        }
+      }
+      translate([fp_under_cyl_x1,fp_under_cyl_y1,-fp_under_cyl_h+bp_h2]){
+        difference(){
+          cylinder(h=fp_under_cyl_h,d=fp_under_cyl_od,$fn=50);
+          cylinder(h=fp_under_cyl_h,d=fp_under_cyl_id,$fn=50);
+        }
+      }
+      translate([fp_under_cyl_x2,fp_under_cyl_y2,-fp_under_cyl_h+bp_h2]){
+        difference(){
+          cylinder(h=fp_under_cyl_h,d=fp_under_cyl_od,$fn=50);
+          cylinder(h=fp_under_cyl_h,d=fp_under_cyl_id,$fn=50);
+        }
+      }
+      translate([fp_under_rect_x-fp_under_rect_l/2,fp_under_rect_y-fp_under_rect_w/2,-fp_under_rect_h+bp_h2]){
+        cube([fp_under_rect_l,fp_under_rect_w,fp_under_rect_h]);
+      }
+    }
+      translate([bp_hole_x, bp_hole_y,0])
+        cylinder(d=fp_id1,h=fp_h1,$fn=50);    
+  }
 }
 
 //back_plate();
-front_plate();
+//front_plate();
+spring_holder();
+//front_plate_attachment();
