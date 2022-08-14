@@ -24,6 +24,7 @@ echo(points_2);
 
 body_height = 30;
 rounding_r = 10;
+shell_thickness = 3;
 
 
 //how far the neck extends into the body
@@ -259,7 +260,7 @@ module frets_bottom(l,t,w1,w2){
 module frets_shell(l,t,w1,w2){
   difference() {
     frets_bottom(frets_len,27,w1-t/2,w2-t/2);
-    frets_bottom(frets_len,24,w1-t/2-3,w2-t/2-3);    
+    frets_bottom(frets_len,24,w1-t/2-shell_thickness,w2-t/2-shell_thickness);    
   }
 }
 
@@ -388,24 +389,24 @@ cube([90.5,62,22.2]);
 
 
 color("green"){
-  translate([neck_start_x-neck_in_body,0,body_height+rounding_r/2+3]){
+  translate([neck_start_x-neck_in_body,0,body_height+rounding_r/2+shell_thickness]){
     neck_1_top(neck_len_1,w1,w2);
   }
 }
 color("red"){
-  translate([neck_start_x-neck_in_body,0,neck_thickness+rounding_r/2+3]){
+  translate([neck_start_x-neck_in_body,0,neck_thickness+rounding_r/2+shell_thickness]){
     neck_shell(neck_len_1,neck_thickness,w1,w2);
   }
 }
 
 color("orange"){
-  translate([neck_start_x+neck_len_1-neck_in_body,0,neck_thickness+rounding_r/2+3]){
+  translate([neck_start_x+neck_len_1-neck_in_body,0,neck_thickness+rounding_r/2+shell_thickness]){
   frets_shell(frets_len,neck_thickness,w2,w3);
   }
 }
 
 color("purple"){
-  translate([neck_start_x+neck_len_1-neck_in_body,0,body_height+rounding_r/2+3]){
+  translate([neck_start_x+neck_len_1-neck_in_body,0,body_height+rounding_r/2+shell_thickness]){
     frets_top(frets_len,w2,w3);
   }
 }
