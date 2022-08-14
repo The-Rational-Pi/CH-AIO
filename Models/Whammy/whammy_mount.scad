@@ -9,7 +9,7 @@ bp_x2 = 35.5; //length without thin bits on end
 bp_y = 32; //width
 
 //heights are of the whole piece at given point
-bp_h1 = 1.4; //thinnest part on edges
+bp_h1 = 1.2; //thinnest part on edges
 bp_h2 = 2.4; //most of the piece
 bp_h3 = 3; //little raised circular bit before the cylinder
 bp_h4 = 9.3; // protruding cylinder
@@ -204,7 +204,7 @@ module front_plate() {
   }
 }
 
-//back_plate();
+back_plate();
 //front_plate();
-spring_holder();
+//spring_holder();
 //front_plate_attachment();
