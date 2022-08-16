@@ -1,5 +1,4 @@
-//import("WhammyBarJointv2.stl");
-
+use<compliant_cyl.scad>;
 //PARAMS//
 
 //Back plate (bit with just plate and cylinder
@@ -70,8 +69,9 @@ fpa_slot_r = 16;
 //spring holder (arm thingy, need two of them)
 //pain in the ass to measure, at least they are the same
 
-sh_id = 9;
+sh_id = 8.7;
 sh_od = 13;
+sh_od_c = 16;
 sh_id2 = 2.54; //smaller hole
 
 sh_h1 = 2.54; //thickness at circle bit
@@ -80,7 +80,12 @@ sh_h2 = 2.54; //thickness at other end
 sh_htot = 3.8; // overall zmax-zmin, there's some overlap
 sh_hoverlap = sh_h1 + sh_h2 - sh_htot;
 
-sh_polygon = [[-3,0],[16,0],[17,-3.5],[16,-4.5],[9.5,-3.5],[8,-7.2],[2.5,-6]];
+sh_polygon = [[-2,0],[16,0],[17,-3.5],[16,-4.5],[9.5,-3.5],[9,-7.5],[2.5,-6]];
+
+sh_dx = sh_polygon[5].x - sh_polygon[6].x;
+sh_dy = sh_polygon[5].y - sh_polygon[6].y;
+
+sh_theta = atan(sh_dy/sh_dx);
 
 sh_x2 = 25.3 - sh_od/2;
 sh_y2 = 4.5;
@@ -131,6 +136,38 @@ module spring_holder() {
     }
     
   }
+}
+
+module spring_holder_compliant() {
+  difference(){
+    union() {
+      compliant_cyl(sh_od_c/2,sh_id/2,sh_htot,11,4, $fn=50);
+      difference(){
+        rotate([0,0,-sh_theta])
+        union(){
+          translate([sh_od/2-3,sh_od/2,0])
+          linear_extrude(sh_htot) {
+            polygon(sh_polygon);
+          }
+          rotate([0,0,2*sh_theta]){
+            mirror([0,-1,0]){
+              translate([sh_od/2-3,sh_od/2,0])
+              linear_extrude(sh_htot) {
+                polygon(sh_polygon);
+              }
+              
+            }
+          }
+        }
+        difference(){
+          cylinder(h=sh_htot,d=sh_od_c,$fn=50);
+          compliant_cyl(sh_od_c/2,sh_id/2,sh_htot,11,4,$fn=50);
+        }
+      }
+    }
+    translate([sh_od/2,0,3.5]) cube([8,3.7,7],center=true);
+  }
+//  rotate([0,0,-29]) compliant_arc(19,14.5,sh_htot,2.7,4.5,55, $fn=50);
 }
 
 module front_plate_attachment() {
@@ -205,6 +242,7 @@ module front_plate() {
 }
 
 //back_plate();
-front_plate();
+//front_plate();
 //spring_holder();
+spring_holder_compliant();
 //front_plate_attachment();
